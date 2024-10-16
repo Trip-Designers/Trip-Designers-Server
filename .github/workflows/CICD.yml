@@ -41,8 +41,8 @@ jobs:
       - name: Docker build
         run: |
           docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PW }}
-          docker build --progress plain -t ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_IMAGE_NAME }} .
-          docker push ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_IMAGE_NAME }}
+          docker build --progress plain -t ${{ secrets.DOCKER_ID }}/trip-designers .
+          docker push ${{ secrets.DOCKER_ID }}/trip-designers
 
       - name: EC2 Deploy
         uses: appleboy/ssh-action@v0.1.10
@@ -51,6 +51,6 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_IMAGE_NAME }}
+            docker pull ${{ secrets.DOCKER_ID }}/trip-designers
             docker stop trip-desiners-container
-            docker run -d --rm --name trip-desiners-container -p 8080:8080 ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_IMAGE_NAME }}
+            docker run -d --rm --name trip-desiners-container -p 8080:8080 ${{ secrets.DOCKER_ID }}/trip-designers
