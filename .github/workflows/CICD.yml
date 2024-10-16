@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-docker-image:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -31,11 +31,11 @@ jobs:
       run: ./gradlew build
 
     # Docker 이미지 Build
-    - name: docker image build
+    - name: Docker image build
       run: docker build -t ${{ secrets.DOCKER_ID }}/spring-cicd-test .
 
     # DockerHub Login (push 하기 위해)
-    - name: docker login
+    - name: Docker login
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_ID }}
@@ -45,17 +45,19 @@ jobs:
     - name: Docker Hub push
       run: docker push ${{ secrets.DOCKER_ID }}/spring-cicd-test
 
-    - name: docker pull
-      run : sudo docker pull ${{ secrets.DOCKER_ID }}/spring-cicd-test
+    # EC2에 SSH 접속 및 배포
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          docker pull ${{ secrets.DOCKER_ID }}/spring-cicd-test
 
-    - name: docker stop container
-      run: |
-        if [ $(sudo docker ps -a -q -f name=spring-cicd-test) ]; then
-          sudo docker stop spring-cicd-test
-        fi
+          docker stop spring-cicd-test || true
+          docker rm spring-cicd-test || true
 
-    - name: docker run new container
-      run: sudo docker run --rm -it -d -p 80:8080 --name spring-cicd-test ${{ secrets.DOCKER_ID }}/spring-cicd-test
+          docker run -d --name spring-cicd-test -p 80:8080 ${{ secrets.DOCKER_ID }}/spring-cicd-test
 
-    - name: delete old docker image
-      run: sudo docker system prune -f
+          docker system prune -af
