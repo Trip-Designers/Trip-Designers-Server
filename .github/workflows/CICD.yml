@@ -44,5 +44,5 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         script: |
           docker pull ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_IMAGE_NAME }}
-          docker stop trip-designers_server-container 
+          docker stop trip-designers-container
           docker run -d --rm --name trip-designers-container -p 8080:8080 ${{ secrets.DOCKER_ID }}/${{ secrets.DOCKER_IMAGE_NAME }}
