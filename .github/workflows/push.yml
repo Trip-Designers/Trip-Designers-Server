@@ -10,6 +10,11 @@ on:
     paths:
       - '**'
 
+permissions:
+  checks: write
+  pull-requests: write
+  contents: read
+
 env:
   SPRING_PROFILES_ACTIVE: prod
 
