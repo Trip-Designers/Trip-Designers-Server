@@ -4,8 +4,6 @@ name: Release CICD
 
 on:
   push:
-    branches: [ "main", "cicd" ]
-  pull_request:
     branches: [ "main" ]
 
 env:
