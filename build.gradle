@@ -22,18 +22,19 @@ configurations {
 repositories {
 	mavenCentral()
 	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
 }
 
-//ext {
-//	set('springAiVersion', "1.0.0-M3")
-//}
+ext {
+	set('springAiVersion', "1.0.0-M3")
+}
 
 dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	implementation 'org.springframework.ai:spring-ai-vertex-ai-gemini-spring-boot-starter'
+	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation group: 'com.navercorp.fixturemonkey', name: 'fixture-monkey', version: '1.0.27'
 	implementation group: 'com.navercorp.fixturemonkey', name: 'fixture-monkey-jakarta-validation', version: '1.0.27'
@@ -46,11 +47,11 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-//dependencyManagement {
-//	imports {
-//		mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
-//	}
-//}
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.ai:spring-ai-bom:${springAiVersion}"
+	}
+}
 
 tasks.named('test') {
 	useJUnitPlatform()
