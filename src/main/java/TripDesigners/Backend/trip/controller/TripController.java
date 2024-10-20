@@ -1,18 +1,17 @@
 package TripDesigners.Backend.trip.controller;
 
-import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 public class TripController {
 
-	private final VertexAiGeminiChatModel vertexAiGeminiChatModel;
+	private final OpenAiChatModel openAiChatModel;
 
 	@GetMapping("/hello")
 	public String hello() {
@@ -21,11 +20,6 @@ public class TripController {
 
 	@GetMapping("/gemini")
 	public String gemini() {
-		return vertexAiGeminiChatModel.call("Hello, Gemini!");
-	}
-
-	@GetMapping("/trip/{comment}")
-	public String gemini(@PathVariable String comment) {
-		return vertexAiGeminiChatModel.call(comment);
+		return openAiChatModel.call("Hello, Gemini!");
 	}
 }
