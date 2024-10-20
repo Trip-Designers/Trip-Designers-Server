@@ -4,7 +4,7 @@ name: Release CICD
 
 on:
   push:
-    branches: [ "main", "feature/gemini" ]
+    branches: [ "main" ]
 
 env:
   SPRING_PROFILES_ACTIVE: prod
