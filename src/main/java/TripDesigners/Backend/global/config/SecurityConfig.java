@@ -1,4 +1,4 @@
-package TripDesigners.Backend.config;
+package TripDesigners.Backend.global.config;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
